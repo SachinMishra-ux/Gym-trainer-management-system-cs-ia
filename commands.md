@@ -18,3 +18,5 @@
 ``` uv init -> ```
 
 ``` uv add anypythonpackagename ```
+
+``` uv run test.py ```
