@@ -12,3 +12,9 @@
 5. mkdir folder_name
 
 ```
+
+## uv related commands:
+
+``` uv init -> ```
+
+``` uv add anypythonpackagename ```
