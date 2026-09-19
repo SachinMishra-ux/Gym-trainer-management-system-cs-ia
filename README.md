@@ -16,7 +16,7 @@ A full-stack management web application built for personal trainers to manage cl
 ```text
 Gym-trainer-management-system-cs-ia/
 ├── frontend/
-│   ├── app.py                 # Streamlit main entry point
+│   ├── app.py                 # Streamlit Client Directory & Registration page
 │   ├── api_client.py          # API wrapper client for FastAPI endpoints
 │   └── pages/
 │       ├── dashboard.py       # Trainer dashboard & metrics
@@ -24,12 +24,18 @@ Gym-trainer-management-system-cs-ia/
 │       ├── schedule.py        # Daily schedule & gym grouping
 │       └── payments.py        # Payment status tracking
 ├── backend/
-│   ├── main.py                # FastAPI app entry point & routes
-│   ├── database.py            # Database connection & session setup
-│   ├── api/                   # API routes (clients, sessions, payments, dashboard)
-│   ├── schemas/               # Pydantic request/response schemas
-│   ├── models/                # SQLAlchemy database models
-│   ├── services/               # Business logic layer
+│   ├── main.py                # FastAPI app entry point (/health & CORS)
+│   ├── database.py            # Database connection & SQLAlchemy setup
+│   ├── api/
+│   │   ├── clients.py         # Implemented: GET /clients & POST /clients
+│   │   ├── sessions.py        # Sessions router
+│   │   ├── payments.py        # Payments router
+│   │   └── dashboard.py       # Dashboard router
+│   ├── schemas/
+│   │   └── client.py          # Client Pydantic schemas (ClientCreate, ClientResponse)
+│   ├── models/
+│   │   └── client.py          # Client SQLAlchemy model
+│   ├── services/              # Business logic layer
 │   └── repositories/          # Data access layer
 ├── database/
 │   ├── schema.sql             # SQLite DDL creation script (Clients, Sessions, Payments)
@@ -45,86 +51,32 @@ Gym-trainer-management-system-cs-ia/
 
 ---
 
-## 📊 Database Schema & ERD
+## 🔌 Implemented APIs
 
-The database contains 3 core tables with `created_at` and `updated_at` timestamp tracking:
-
-- **`clients`**: Client personal & contact details (Active / Inactive flag).
-- **`sessions`**: Gym workout sessions, locations, muscle groups, statuses (`scheduled`, `completed`, `cancelled`, `compensation`), and self-referencing `original_session_id` link for compensations.
-- **`payments`**: Monthly client payment tracking (`paid`, `unpaid`, amounts, and payment dates).
-
-```mermaid
-erDiagram
-    CLIENTS ||--o{ SESSIONS : "has"
-    CLIENTS ||--o{ PAYMENTS : "has"
-    SESSIONS ||--o| SESSIONS : "compensation for (original_session_id)"
-
-    CLIENTS {
-        int id PK
-        string name
-        string phone
-        string email
-        boolean active
-        datetime created_at
-        datetime updated_at
-    }
-
-    SESSIONS {
-        int id PK
-        int client_id FK
-        date date
-        time start_time
-        string gym_location
-        string body_part
-        string status
-        int original_session_id FK
-        text notes
-        datetime created_at
-        datetime updated_at
-    }
-
-    PAYMENTS {
-        int id PK
-        int client_id FK
-        int month
-        int year
-        string status
-        real amount
-        date paid_on
-        datetime created_at
-        datetime updated_at
-    }
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | Health check endpoint returning backend status |
+| `GET` | `/clients` | List all clients (supports `?active_only=true`) |
+| `POST` | `/clients` | Create a new client record |
 
 ---
 
-## 🚀 Database Setup & Execution Commands
+## 🚀 How to Run
 
-### 1. Initialize Tables & Seed Sample Data
-
-```shell
-# Create database tables
+### 1. Initialize Database & Seed Records
+```bash
 sqlite3 gym_trainer.db < database/schema.sql
-
-# Insert sample seed records (20 clients, 77 sessions, 40 payments)
 sqlite3 gym_trainer.db < database/seed.sql
 ```
 
-### 2. Verify Database Records
-
-```shell
-# Check session status breakdown
-sqlite3 gym_trainer.db "SELECT status, COUNT(*) FROM sessions GROUP BY status;"
-
-# Check payment status breakdown
-sqlite3 gym_trainer.db "SELECT status, COUNT(*) FROM payments GROUP BY status;"
+### 2. Start Backend API Server
+```bash
+uvicorn backend.main:app --reload --port 8000
 ```
+- Swagger API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
----
-
-## ✅ Completed Milestones
-
-1. **Project Directory & File Structure Setup**: Created full modular directory structure (`frontend/`, `backend/`, `database/`, `tests/`, `data/`).
-2. **Database DDL Schema**: Created `database/schema.sql` with `clients`, `sessions`, and `payments` tables including `created_at` and `updated_at` timestamps and foreign key constraints.
-3. **Database Documentation**: Created `database/schema.md` with full Mermaid ERD diagram and field dictionaries.
-4. **Seed Dataset**: Created `database/seed.sql` populating SQLite with 20 clients, 77 mixed session records (completed, cancelled, linked compensation, scheduled), and 40 payment records.
+### 3. Start Streamlit UI Page
+```bash
+streamlit run frontend/app.py
+```
+- Web UI: [http://localhost:8501](http://localhost:8501)

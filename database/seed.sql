@@ -10,26 +10,26 @@ DELETE FROM clients;
 
 -- 1. INSERT CLIENTS (20 Records)
 INSERT INTO clients (id, name, phone, email, active, created_at, updated_at) VALUES
-(1, 'Alex Johnson', '+1-555-0101', 'alex.j@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(2, 'Sarah Connor', '+1-555-0102', 'sarah.c@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(3, 'Michael Scott', '+1-555-0103', 'm.scott@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(4, 'Priya Sharma', '+91-98765-43210', 'priya.sharma@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(5, 'David Miller', '+1-555-0105', 'david.m@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(6, 'Emma Watson', '+44-20-7946-0912', 'emma.w@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(7, 'Rahul Verma', '+91-98765-12345', 'rahul.v@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(8, 'Jessica Alba', '+1-555-0108', 'jessica.a@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(9, 'James Wilson', '+1-555-0109', 'j.wilson@example.com', 0, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(10, 'Sophia Martinez', '+1-555-0110', 'sophia.m@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(11, 'Daniel Lee', '+1-555-0111', 'daniel.l@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(12, 'Olivia Taylor', '+1-555-0112', 'olivia.t@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(13, 'Ethan Davis', '+1-555-0113', 'ethan.d@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(14, 'Chloe Anderson', '+1-555-0114', 'chloe.a@example.com', 0, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(15, 'Liam Thomas', '+1-555-0115', 'liam.t@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(16, 'Maya Patel', '+91-98765-67890', 'maya.p@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(17, 'Noah White', '+1-555-0117', 'noah.w@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(18, 'Ava Jackson', '+1-555-0118', 'ava.j@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(19, 'Lucas Harris', '+1-555-0119', 'lucas.h@example.com', 0, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
-(20, 'Isabella Clark', '+1-555-0120', 'isabella.c@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00');
+(1, 'Alex Johnson', '5550101', 'alex.j@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(2, 'Sarah Connor', '5550102', 'sarah.c@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(3, 'Michael Scott', '5550103', 'm.scott@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(4, 'Priya Sharma', '9876543210', 'priya.sharma@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(5, 'David Miller', '5550105', 'david.m@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(6, 'Emma Watson', '7946091234', 'emma.w@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(7, 'Rahul Verma', '9876512345', 'rahul.v@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(8, 'Jessica Alba', '5550108', 'jessica.a@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(9, 'James Wilson', '5550109', 'j.wilson@example.com', 0, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(10, 'Sophia Martinez', '5550110', 'sophia.m@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(11, 'Daniel Lee', '5550111', 'daniel.l@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(12, 'Olivia Taylor', '5550112', 'olivia.t@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(13, 'Ethan Davis', '5550113', 'ethan.d@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(14, 'Chloe Anderson', '5550114', 'chloe.a@example.com', 0, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(15, 'Liam Thomas', '5550115', 'liam.t@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(16, 'Maya Patel', '9876567890', 'maya.p@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(17, 'Noah White', '5550117', 'noah.w@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(18, 'Ava Jackson', '5550118', 'ava.j@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(19, 'Lucas Harris', '5550119', 'lucas.h@example.com', 0, '2026-08-01 09:00:00', '2026-08-01 09:00:00'),
+(20, 'Isabella Clark', '5550120', 'isabella.c@example.com', 1, '2026-08-01 09:00:00', '2026-08-01 09:00:00');
 
 -- 2. INSERT SESSIONS (65 Records - Mix of Scheduled, Completed, Cancelled, and linked Compensation)
 INSERT INTO sessions (id, client_id, date, start_time, gym_location, body_part, status, original_session_id, notes, created_at, updated_at) VALUES
