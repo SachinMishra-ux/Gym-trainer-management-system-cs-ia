@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
-PHONE_REGEX = re.compile(r"^\+?[0-9\s\-()]{7,15}$")
+PHONE_REGEX = re.compile(r"\b[6-9]\d{9}\b")
 
 class ClientBase(BaseModel):
     name: str = Field(..., min_length=1, description="Client full name")
@@ -14,7 +14,7 @@ class ClientBase(BaseModel):
 
 class ClientCreate(ClientBase):
     @field_validator("name")
-    @classmethod
+    @classmethod #decorator
     def validate_name(cls, v: str) -> str:
         v_stripped = v.strip()
         if not v_stripped:

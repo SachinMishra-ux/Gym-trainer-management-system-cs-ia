@@ -53,30 +53,35 @@ Gym-trainer-management-system-cs-ia/
 
 ## 🔌 Implemented APIs
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check endpoint returning backend status |
-| `GET` | `/clients` | List all clients (supports `?active_only=true`) |
-| `POST` | `/clients` | Create a new client record |
+| Method   | Endpoint     | Description                                      |
+| -------- | ------------ | ------------------------------------------------ |
+| `GET`  | `/health`  | Health check endpoint returning backend status   |
+| `GET`  | `/clients` | List all clients (supports`?active_only=true`) |
+| `POST` | `/clients` | Create a new client record                       |
 
 ---
 
 ## 🚀 How to Run
 
 ### 1. Initialize Database & Seed Records
+
 ```bash
 sqlite3 gym_trainer.db < database/schema.sql
 sqlite3 gym_trainer.db < database/seed.sql
 ```
 
 ### 2. Start Backend API Server
+
 ```bash
 uvicorn backend.main:app --reload --port 8000
 ```
+
 - Swagger API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ### 3. Start Streamlit UI Page
+
 ```bash
 streamlit run frontend/app.py
 ```
+
 - Web UI: [http://localhost:8501](http://localhost:8501)

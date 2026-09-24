@@ -7,6 +7,6 @@ requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.141.1",
     "plotly>=6.9.0",
-    "pydantic>=2.13.5",
+    "pydantic[email]>=2.13.5",
     "sqlalchemy>=2.0.54",
 ]
