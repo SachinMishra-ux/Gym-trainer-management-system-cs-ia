@@ -34,19 +34,22 @@ def create_client(name: str, phone: Optional[str] = None, email: Optional[str] =
         try:
             error_json = response.json()
             detail = error_json.get("detail", "Failed to create client")
-            if isinstance(detail, list):
-                messages = []
-                for err in detail:
-                    msg = err.get("msg", "")
-                    if "Value error, " in msg:
-                        msg = msg.replace("Value error, ", "")
-                    field = err.get("loc", [])[-1] if err.get("loc") else "Field"
-                    messages.append(f"{str(field).capitalize()}: {msg}")
-                raise ValueError("; ".join(messages))
-            elif isinstance(detail, str):
+            # if isinstance(detail, list):
+            #     messages = []
+            #     for err in detail:
+            #         msg = err.get("msg", "")
+            #         if "Value error, " in msg:
+            #             msg = msg.replace("Value error, ", "")
+            #         field = err.get("loc", [])[-1] if err.get("loc") else "Field"
+            #         messages.append(f"{str(field).capitalize()}: {msg}")
+            #     raise ValueError("; ".join(messages))
+            # elif isinstance(detail, str):
+            #     raise ValueError(detail)
+            # else:
+            #     raise ValueError(str(detail))
+            if not isinstance(detail,list):
                 raise ValueError(detail)
-            else:
-                raise ValueError(str(detail))
+
         except Exception as parse_err:
             if isinstance(parse_err, ValueError):
                 raise parse_err
