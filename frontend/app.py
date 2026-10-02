@@ -95,52 +95,62 @@ with tab1:
         else:
             st.warning("No clients match your search query.")
 
-# # with tab2:
-#     st.subheader("Register a New Client")
-#     st.write("Fill out the form below to create a new client record via the backend REST API.")
-    
-#     with st.form(key="add_client_form", clear_on_submit=True):
-#         name_input = st.text_input("Client Full Name *", placeholder="e.g. John Doe")
-#         phone_input = st.text_input("Phone Number (10 digits)", placeholder="e.g. 9828376353")
-#         email_input = st.text_input("Email Address", placeholder="e.g. john.doe@example.com")
-#         active_input = st.checkbox("Active Client Status", value=True)
-        
-#         submit_btn = st.form_submit_button("Add Client", type="primary")
 
-#     # Display feedback message directly below the Add Client form
-#     if submit_btn:
-#         name_val = name_input.strip()
-#         phone_val = phone_input.strip()
-#         email_val = email_input.strip()
+with tab2:
+    st.subheader("Register a New Client")
+    st.write("Fill out the form below to create a new client record via the backend REST API.")
+    
+    with st.form(key="add_client_form", clear_on_submit=False):
+        name_input = st.text_input("Client Full Name *", placeholder="e.g. John Doe")
+        phone_input = st.text_input("Phone Number (10 digits)", placeholder="e.g. 9828376353")
+        email_input = st.text_input("Email Address", placeholder="e.g. john.doe@example.com")
+        active_input = st.checkbox("Active Client Status", value=True)
         
-#         # Extract digits
-#         digits_only = re.sub(r"\D", "", phone_val) if phone_val else ""
-#         if phone_val and phone_val.startswith("+91") and len(digits_only) > 10:
-#             digits_only = digits_only[2:]
-#         elif phone_val and phone_val.startswith("+1") and len(digits_only) > 10:
-#             digits_only = digits_only[1:]
-#         elif phone_val and phone_val.startswith("+44") and len(digits_only) > 10:
-#             digits_only = digits_only[2:]
+        submit_btn = st.form_submit_button("Add Client", type="primary")
         
-#         # Validation Checks
-#         if not name_val:
-#             st.error("❌ Invalid Field: Client Name is required!")
-#         elif phone_val and not PHONE_REGEX.match(phone_val):
-#             st.error("❌ Invalid Field: Phone number must contain valid digits only (e.g. 9828376353). Alphabets and letters are not allowed!")
-#         elif phone_val and len(digits_only) != 10:
-#             st.error(f"❌ Invalid Field: Phone number must be a valid 10-digit number! (Found {len(digits_only)} digits)")
-#         elif email_val and not EMAIL_REGEX.match(email_val):
-#             st.error("❌ Invalid Field: Please enter a valid email address (e.g. user@example.com).")
-#         elif not health_info["healthy"]:
-#             st.error("❌ API Error: Backend server is offline.")
-#         else:
-#             try:
-#                 new_client = create_client(
-#                     name=name_val,
-#                     phone=phone_val if phone_val else None,
-#                     email=email_val if email_val else None,
-#                     active=active_input
-#                 )
-#                 st.success(f"🎉 Success! Client '{new_client['name']}' (ID: #{new_client['id']}) was successfully added!")
-#             except Exception as e:
-#                 st.error(f"❌ Creation Failed: {e}")
+
+    # Display feedback message directly below the Add Client form
+    if submit_btn:
+        name_val = name_input.strip()
+        phone_val = phone_input.strip()
+        email_val = email_input.strip()
+        
+        # Extract digits
+
+        # if phone_val:
+        #     # Remove all non-digit characters from the phone number
+        #     digits_only = re.sub(r"\D", "", phone_val)
+        # else:
+        #     digits_only = ""
+            
+        digits_only = re.sub(r"\D", "", phone_val) if phone_val else ""
+        if phone_val and phone_val.startswith("+91") and len(digits_only) > 10:
+            digits_only = digits_only[2:]
+        elif phone_val and phone_val.startswith("+1") and len(digits_only) > 10:
+            digits_only = digits_only[1:]
+        elif phone_val and phone_val.startswith("+44") and len(digits_only) > 10:
+            digits_only = digits_only[2:]
+        # elif
+        
+        # Validation Checks
+        if not name_val:
+            st.error("❌ Invalid Field: Client Name is required!")
+        elif phone_val and not PHONE_REGEX.match(phone_val):
+            st.error("❌ Invalid Field: Phone number must contain valid digits only (e.g. 9828376353). Alphabets and letters are not allowed!")
+        elif phone_val and len(digits_only) != 10:
+            st.error(f"❌ Invalid Field: Phone number must be a valid 10-digit number! (Found {len(digits_only)} digits)")
+        elif email_val and not EMAIL_REGEX.match(email_val):
+            st.error("❌ Invalid Field: Please enter a valid email address (e.g. user@example.com).")
+        elif not health_info["healthy"]:
+            st.error("❌ API Error: Backend server is offline.")
+        else:
+            try:
+                new_client = create_client(
+                    name=name_val,
+                    phone=phone_val if phone_val else None,
+                    email=email_val if email_val else None,
+                    active=active_input
+                )
+                st.success(f"🎉 Success! Client '{new_client['name']}' (ID: #{new_client['id']}) was successfully added!")
+            except Exception as e:
+                st.error(f"❌ Creation Failed: {e}")
