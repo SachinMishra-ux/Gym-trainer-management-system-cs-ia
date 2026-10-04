@@ -16,7 +16,7 @@ A full-stack management web application built for personal trainers to manage cl
 ```text
 Gym-trainer-management-system-cs-ia/
 ├── frontend/
-│   ├── app.py                 # Streamlit Client Directory & Registration page
+│   ├── app.py                 # Streamlit Client Directory, Registration & Details page
 │   ├── api_client.py          # API wrapper client for FastAPI endpoints
 │   └── pages/
 │       ├── dashboard.py       # Trainer dashboard & metrics
@@ -27,7 +27,7 @@ Gym-trainer-management-system-cs-ia/
 │   ├── main.py                # FastAPI app entry point (/health & CORS)
 │   ├── database.py            # Database connection & SQLAlchemy setup
 │   ├── api/
-│   │   ├── clients.py         # Implemented: GET /clients & POST /clients
+│   │   ├── clients.py         # Implemented: GET /clients, GET /clients/{id}, POST /clients
 │   │   ├── sessions.py        # Sessions router
 │   │   ├── payments.py        # Payments router
 │   │   └── dashboard.py       # Dashboard router
@@ -41,6 +41,8 @@ Gym-trainer-management-system-cs-ia/
 │   ├── schema.sql             # SQLite DDL creation script (Clients, Sessions, Payments)
 │   ├── seed.sql               # Seed SQL script (20 clients, 77 sessions, 40 payments)
 │   └── schema.md              # Database documentation & Mermaid ERD diagram
+├── docs/
+│   └── CLIENT_MANAGEMENT_MODULE.md # Technical documentation & flow report
 ├── tests/                     # Automated test suites
 ├── data/
 │   └── seed.py                # Python seed script
@@ -53,35 +55,31 @@ Gym-trainer-management-system-cs-ia/
 
 ## 🔌 Implemented APIs
 
-| Method   | Endpoint     | Description                                      |
-| -------- | ------------ | ------------------------------------------------ |
-| `GET`  | `/health`  | Health check endpoint returning backend status   |
-| `GET`  | `/clients` | List all clients (supports`?active_only=true`) |
-| `POST` | `/clients` | Create a new client record                       |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | Health check endpoint returning backend status |
+| `GET` | `/clients` | List all clients (supports `?active_only=true`) |
+| `GET` | `/clients/{client_id}` | Retrieve details for a specific client by ID (returns 404 if not found) |
+| `POST` | `/clients` | Create a new client record |
 
 ---
 
 ## 🚀 How to Run
 
 ### 1. Initialize Database & Seed Records
-
 ```bash
 sqlite3 gym_trainer.db < database/schema.sql
 sqlite3 gym_trainer.db < database/seed.sql
 ```
 
 ### 2. Start Backend API Server
-
 ```bash
 uvicorn backend.main:app --reload --port 8000
 ```
-
 - Swagger API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ### 3. Start Streamlit UI Page
-
 ```bash
 streamlit run frontend/app.py
 ```
-
 - Web UI: [http://localhost:8501](http://localhost:8501)

@@ -21,6 +21,14 @@ def get_clients(active_only: bool = False) -> List[Dict[str, Any]]:
     response.raise_for_status()
     return response.json()
 
+def get_client(client_id: int) -> Dict[str, Any]:
+    """Fetch a single client by ID from FastAPI backend."""
+    response = requests.get(f"{BACKEND_URL}/clients/{client_id}", timeout=5)
+    if response.status_code == 404:
+        raise ValueError(f"Client with ID #{client_id} not found.")
+    response.raise_for_status()
+    return response.json()
+
 def create_client(name: str, phone: Optional[str] = None, email: Optional[str] = None, active: bool = True) -> Dict[str, Any]:
     """Create a new client via FastAPI backend."""
     payload = {
@@ -34,22 +42,19 @@ def create_client(name: str, phone: Optional[str] = None, email: Optional[str] =
         try:
             error_json = response.json()
             detail = error_json.get("detail", "Failed to create client")
-            # if isinstance(detail, list):
-            #     messages = []
-            #     for err in detail:
-            #         msg = err.get("msg", "")
-            #         if "Value error, " in msg:
-            #             msg = msg.replace("Value error, ", "")
-            #         field = err.get("loc", [])[-1] if err.get("loc") else "Field"
-            #         messages.append(f"{str(field).capitalize()}: {msg}")
-            #     raise ValueError("; ".join(messages))
-            # elif isinstance(detail, str):
-            #     raise ValueError(detail)
-            # else:
-            #     raise ValueError(str(detail))
-            if not isinstance(detail,list):
+            if isinstance(detail, list):
+                messages = []
+                for err in detail:
+                    msg = err.get("msg", "")
+                    if "Value error, " in msg:
+                        msg = msg.replace("Value error, ", "")
+                    field = err.get("loc", [])[-1] if err.get("loc") else "Field"
+                    messages.append(f"{str(field).capitalize()}: {msg}")
+                raise ValueError("; ".join(messages))
+            elif isinstance(detail, str):
                 raise ValueError(detail)
-
+            else:
+                raise ValueError(str(detail))
         except Exception as parse_err:
             if isinstance(parse_err, ValueError):
                 raise parse_err

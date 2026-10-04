@@ -20,6 +20,20 @@ def list_clients(active_only: bool = False, db: Session = Depends(get_db)):
     clients = query.order_by(Client.id.asc()).all()
     return clients
 
+@router.get("/{client_id}", response_model=ClientResponse, summary="Get client details by ID")
+def get_client(client_id: int, db: Session = Depends(get_db)):
+    """
+    Retrieve details for a specific client by ID.
+    Raises 404 if client does not exist.
+    """
+    client = db.query(Client).filter(Client.id == client_id).first()
+    if not client:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Client with ID #{client_id} not found."
+        )
+    return client
+
 @router.post("", response_model=ClientResponse, status_code=status.HTTP_201_CREATED, summary="Create a new client")
 def create_client(client_data: ClientCreate, db: Session = Depends(get_db)):
     """

@@ -1,7 +1,7 @@
 import re
 import streamlit as st
 import pandas as pd
-from api_client import check_health, get_clients, create_client
+from api_client import check_health, get_clients, get_client, create_client
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 PHONE_REGEX = re.compile(r"^\+?[0-9\s\-()]{7,15}$")
@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 st.title("🏋️‍♂️ Gym Trainer Management System")
-st.caption("Client Directory & Client Registration (Integrated with FastAPI Backend)")
+st.caption("Client Directory, Registration & Detail Profile (Integrated with FastAPI Backend)")
 
 # Check Backend Health Status
 health_info = check_health()
@@ -51,8 +51,12 @@ with col3:
 
 st.markdown("---")
 
-# Main Content Tabs: Client Directory & Add New Client
-tab1, tab2 = st.tabs(["📋 Client Directory (GET /clients)", "➕ Add New Client (POST /clients)"])
+# Main Content Tabs: Client Directory, Add New Client, and Client Details
+tab1, tab2, tab3 = st.tabs([
+    "📋 Client Directory (GET /clients)",
+    "➕ Add New Client (POST /clients)",
+    "🔍 Client Details (GET /clients/{client_id})"
+])
 
 with tab1:
     st.subheader("Client Roster")
@@ -95,7 +99,6 @@ with tab1:
         else:
             st.warning("No clients match your search query.")
 
-
 with tab2:
     st.subheader("Register a New Client")
     st.write("Fill out the form below to create a new client record via the backend REST API.")
@@ -107,7 +110,6 @@ with tab2:
         active_input = st.checkbox("Active Client Status", value=True)
         
         submit_btn = st.form_submit_button("Add Client", type="primary")
-        
 
     # Display feedback message directly below the Add Client form
     if submit_btn:
@@ -115,14 +117,6 @@ with tab2:
         phone_val = phone_input.strip()
         email_val = email_input.strip()
         
-        # Extract digits
-
-        # if phone_val:
-        #     # Remove all non-digit characters from the phone number
-        #     digits_only = re.sub(r"\D", "", phone_val)
-        # else:
-        #     digits_only = ""
-            
         digits_only = re.sub(r"\D", "", phone_val) if phone_val else ""
         if phone_val and phone_val.startswith("+91") and len(digits_only) > 10:
             digits_only = digits_only[2:]
@@ -130,7 +124,6 @@ with tab2:
             digits_only = digits_only[1:]
         elif phone_val and phone_val.startswith("+44") and len(digits_only) > 10:
             digits_only = digits_only[2:]
-        # elif
         
         # Validation Checks
         if not name_val:
@@ -154,3 +147,40 @@ with tab2:
                 st.success(f"🎉 Success! Client '{new_client['name']}' (ID: #{new_client['id']}) was successfully added!")
             except Exception as e:
                 st.error(f"❌ Creation Failed: {e}")
+
+with tab3:
+    st.subheader("Client Details Lookup")
+    st.write("Fetch individual client details via `GET /clients/{client_id}`.")
+    
+    if not health_info["healthy"]:
+        st.info("Backend server is currently offline.")
+    else:
+        # Option to select existing client or enter ID manually
+        client_options = {f"#{c['id']} - {c['name']}": c['id'] for c in clients}
+        
+        lookup_col1, lookup_col2 = st.columns([2, 1])
+        with lookup_col1:
+            selected_option = st.selectbox("Select Client from Roster", options=["-- Select Client --"] + list(client_options.keys()))
+        with lookup_col2:
+            manual_id = st.number_input("Or Enter Client ID", min_value=1, step=1, value=1)
+        
+        # Determine target ID
+        target_id = client_options[selected_option] if selected_option != "-- Select Client --" else int(manual_id)
+        
+        if st.button("Fetch Client Details", type="primary"):
+            try:
+                client_detail = get_client(target_id)
+                st.success(f"Successfully retrieved Client #{client_detail['id']}!")
+                
+                # Render Profile Summary Card
+                p_col1, p_col2 = st.columns(2)
+                with p_col1:
+                    st.markdown(f"**Client ID:** #{client_detail['id']}")
+                    st.markdown(f"**Full Name:** {client_detail['name']}")
+                    st.markdown(f"**Active Status:** {'✅ Active' if client_detail['active'] else '❌ Inactive'}")
+                with p_col2:
+                    st.markdown(f"**Phone Number:** {client_detail.get('phone') or 'N/A'}")
+                    st.markdown(f"**Email Address:** {client_detail.get('email') or 'N/A'}")
+                    st.markdown(f"**Registered On:** {client_detail.get('created_at') or 'N/A'}")
+            except Exception as err:
+                st.error(f"❌ Lookup Error: {err}")
